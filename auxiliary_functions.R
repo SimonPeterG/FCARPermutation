@@ -88,19 +88,25 @@ gen_permutation <- function(X, cols.to.permute = NA) {
   X
 }
 
-permutation.test <- function(Y1, Y2, u, X, kernel.function, h, cols.to.permute = c(NA, NA), npoints = 75, P = 500) {
+permutation.test <- function(Y1, Y2, u, X, kernel.function, h, npoints = 75, P = 500) {
   
   fit1 <- fcar.fit(Y1, X, u, kernel.function, h, npoints)
   fit2 <- fcar.fit(Y2, X, u, kernel.function, h, npoints)
-  null.resid <- sum((fit1$residuals)^2) + sum((fit2$residuals)^2)
-  resids <- numeric(P)
+  null.resid1 <- sum((fit1$residuals)^2)
+  null.resid2 <-  sum((fit2$residuals)^2)
+  resids1 <- numeric(P)
+  resids2 <- numeric(P)
   
   for (i in 1:P) {
-    if (i %% 10 == 0) print(paste0("Iteration: ", i))
-    temp.fit1 <- fcar.fit(Y1, gen_permutation(X, cols.to.permute[1]), u, epanechnikov, h)
-    temp.fit2 <- fcar.fit(Y2, gen_permutation(X, cols.to.permute[2]), u, epanechnikov, h)
-    resids[i] <- sum(temp.fit1$residuals^2) + sum(temp.fit2$residuals^2)
+    if (i %% 250 == 0) print(paste0("Iteration: ", i))
+    temp.fit1 <- fcar.fit(Y1, gen_permutation(X, 2), u, epanechnikov, h, npoints)
+    temp.fit2 <- fcar.fit(Y2, gen_permutation(X, 1), u, epanechnikov, h, npoints)
+    resids1[i] <- sum(temp.fit1$residuals^2)
+    resids2[i] <- sum(temp.fit2$residuals^2)
   }
 
-  list(null.resid = null.resid, ref.distribution = resids)
+  list(null.stat1 = null.resid1, null.stat2 = null.resid2,
+  fit1 = fit1, fit2 = fit2,
+  ref.distribution1 = resids1,
+  ref.distribution2 = resids2)
 }
