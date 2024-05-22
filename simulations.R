@@ -70,9 +70,11 @@ for (i in 1:nrow(X)) {
 Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
-expar2 <- foreach(i = 1:niters, .combine = list) %dopar% {
+expar2 <- foreach(i = 1:niters) %dopar% {
     set.seed(i)
-    permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
+    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
+    print(paste0("Iteration ", i, " completed"))
+    tmp
 }
 
 saveRDS(expar2, "results/expar2.Rds")
