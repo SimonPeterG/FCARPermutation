@@ -38,18 +38,18 @@ epanechnikov <- Vectorize(
 get.coefficients <- function(uo, y, X, u, kernel.function, h) {
     W <- diag(kernel.function(u - uo, h))
     X.tilde <- cbind(X, X * (u - uo))
-    tmp <- cbind(diag(rep(1, 2)), diag(rep(0, 2)))
-    tmp %*% solve(t(X.tilde) %*% W %*% X.tilde) %*% t(X.tilde) %*% W %*% y
+    tmp <- MASS::ginv(t(X.tilde) %*% W %*% X.tilde) %*% t(X.tilde) %*% W %*% y
+    tmp[1:(nrow(tmp)/2), ]
 }
 
-fcar.fit <- function(y, X, u, kernel.function, h, npoints = 75) {
+fcar.fit <- function(y, X, u, kernel.function, h, p = 1, k = 2, npoints = 75) {
     
     Mybounds <- as.numeric(quantile(u, probs = c(.05, .95)))
     fhat_int <- seq(Mybounds[1], Mybounds[2], length.out = npoints)
     fhat_points <- stats::filter(fhat_int, c(.5, .5))[-length(fhat_int)]
     comdiff <- fhat_points[2] - fhat_points[1]
     fhat_points <- c(fhat_points[1] - comdiff, fhat_points, fhat_points[length(fhat_points)] + comdiff)
-    ajs <- matrix(0, nrow = 2, ncol = length(fhat_points))
+    ajs <- matrix(0, nrow = p * k, ncol = length(fhat_points))
     for (i in 1:length(fhat_points)) {
         ajs[, i] <- get.coefficients(fhat_points[i], y, X, u, epanechnikov, h)
     }
@@ -79,12 +79,10 @@ mse <- function(x, y) {
 }
 
 gen_permutation <- function(X, cols.to.permute = NA) {
-  if (!is.na(cols.to.permute)) {
     idx <- 1:nrow(X)
     for (i in cols.to.permute) {
       X[, i] <- X[, i][sample(idx)]
     }
-  }
   X
 }
 
@@ -111,6 +109,21 @@ permutation.test <- function(Y1, Y2, u, X, kernel.function, h, npoints = 75, P =
   ref.distribution2 = resids2)
 }
 
+individual.permutation <- function(Y1, u, X, kernel.function, h, cols, p = 1, k = 2, npoints = 75, P = 100) {
+  
+  fit1 <- fcar.fit(Y1, X, u, kernel.function, h, p, k, npoints)
+  null.resid1 <- sum((fit1$residuals)^2)
+  resids1 <- numeric(P)
+  
+  for (i in 1:P) {
+    if (i %% 250 == 0) print(paste0("Iteration: ", i))
+    temp.fit1 <- fcar.fit(Y1, gen_permutation(X, cols), u, epanechnikov, h, p, k, npoints)
+    resids1[i] <- sum(temp.fit1$residuals^2)
+  }
+
+  as.numeric(null.resid1 < quantile(resids1, probs = c(0.05)))
+}
+
 
 ##### Estimating multivariate FAR model locally at u0
 ## Inputs
@@ -130,7 +143,8 @@ cppFunction('arma::mat FAR_u0(arma::mat& y,arma::vec& u,double p,double d,double
     int k = y.n_cols;
     
     arma::mat mat_Y = y(arma::span(lagrm,Tlength-1),arma::span(0,k-1));
-
+    
+    arma::mat mat_X(Tlength-lagrm,k*p);
     for(int l = 0; l < p; l++){
       for(int j = 0; j < k; j++){
       mat_X(arma::span::all,k*l+j) = y(arma::span(lagrm-l-1,Tlength-l-2),j);
@@ -210,4 +224,57 @@ APEq <- function(y,u,p,d, q, bwp = 0.1,intnum = 50){
 
 Ape <- function(y,u,p,d) {
     sum(sapply(1:4, function(x) APEq(y, u, p, d, x)))
+}
+
+FAR_est <- function(y,u,p,d,bwp = 0.1,intnum = 50){
+  
+  lagrm <- max(p,d)
+  k <- ncol(y)
+  Tlength <- nrow(y)
+  
+  Mybounds <- as.numeric(quantile(u,probs = c(0.05,0.95)))
+  fhat_int <- seq(Mybounds[1],Mybounds[2],length = intnum)
+  fhat_points <- as.numeric(stats::filter(fhat_int, c(0.5,0.5)))[-length(fhat_int)]
+  comdiff <- fhat_points[2] - fhat_points[1]
+  fhat_points <- c(fhat_points[1]-comdiff,fhat_points,fhat_points[length(fhat_points)]+comdiff)  
+  fhat_mean <- array(rep(NA,(k^2)*p*length(fhat_points)),dim = c(k,k*p,length(fhat_points)))
+  
+  print(length(fhat_points))
+
+  for(i in 1:length(fhat_points)){
+    try({
+      fhat_mean[,,i] <- t(FAR_u0(y,u,p,d,bwp,u0 = fhat_points[i]))[,1:(k*p)]
+    },silent = TRUE)
+    # cat(paste("Progress: ",i,"/",length(fhat_points))," \r")
+  }
+  
+  mat_Y <- matrix(NA,nrow = Tlength-lagrm,ncol = k)
+  mat_X <- matrix(NA,nrow = Tlength-lagrm,ncol = k*p)
+  mat_U <- matrix(NA,nrow = Tlength-lagrm,ncol = 1)
+  
+  mat_Y[1:(Tlength-lagrm),] <- y[(lagrm+1):Tlength,]
+  mat_U[1:(Tlength-lagrm),] <- u[(lagrm+1-d):(Tlength-d)]
+  for(l in 1:p){
+    for(j in 1:k){
+      mat_X[,k*(l-1)+j] <- y[(lagrm+1-l):(Tlength-l),j]
+    }
+  }  
+  cat_U <- as.numeric(cut(mat_U,breaks = c(-Inf,fhat_int,Inf)))
+  print(cat_U)
+  mat_Yhat <- matrix(NA,nrow = Tlength-lagrm,ncol = k)
+  
+  print(Tlength-lagrm)
+  for(t in 1:(Tlength-lagrm)){
+    fhat_t <- fhat_mean[,,cat_U[t]]
+    mat_Yhat[t,] <- t(fhat_t%*%matrix(mat_X[t,],ncol=1))
+  }
+  
+  mat_resid <- mat_Y - mat_Yhat
+  
+  output <- list(mat_Y = mat_Y,mat_Yhat = mat_Yhat,mat_U = mat_U,
+                 mat_resid = mat_resid, mat_X = mat_X, fhat_points = fhat_points,
+                 fhat_mean = fhat_mean)
+  
+  return(output)
+  
 }

@@ -66,7 +66,8 @@ cppFunction('arma::mat FAR_u0(arma::mat& y,arma::vec& u,double p,double d,double
     int k = y.n_cols;
     
     arma::mat mat_Y = y(arma::span(lagrm,Tlength-1),arma::span(0,k-1));
-
+    
+    arma::mat mat_X(Tlength-lagrm,k*p);
     for(int l = 0; l < p; l++){
       for(int j = 0; j < k; j++){
       mat_X(arma::span::all,k*l+j) = y(arma::span(lagrm-l-1,Tlength-l-2),j);

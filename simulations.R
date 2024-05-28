@@ -1,9 +1,9 @@
 rm(list = ls())
-source("auxiliary_functions.R")
 library(parallel)
 library(foreach)
 library(doParallel)
 library(Rcpp)
+source("auxiliary_functions.R")
 
 niters <- 100
 numcores <- detectCores()
@@ -213,30 +213,3 @@ logis3 <- foreach(i = 1:niters) %dopar% {
 }
 
 saveRDS(logis3 , "results/logis3.Rds")
-
-##### Functional coefficients - Constant
-
-# Only Y2 GC Y1
-
-f11 <- function(x,theta=0){rep(-0.65,length(x)) + theta}
-f12 <- function(x,theta=0){rep(0.30,length(x)) + theta}
-f21 <- function(x,theta=0){rep(-0.75,length(x)) + theta}
-f22 <- function(x,theta=0){rep(0.50,length(x)) + theta}
-
-
-# There is no GC
-
-f11 <- function(x,theta=0){rep(-0.65,length(x)) + theta}
-f12 <- function(x,theta=0){rep(0,length(x)) + theta}
-f21 <- function(x,theta=0){rep(0,length(x)) + theta}
-f22 <- function(x,theta=0){rep(0.50,length(x)) + theta}
-
-
-# Both GC 
-
-f11 <- function(x,theta=0){rep(-0.65,length(x)) + theta}
-f12 <- function(x,theta=0){rep(0.30,length(x)) + theta}
-f21 <- function(x,theta=0){rep(-0.75,length(x)) + theta}
-f22 <- function(x,theta=0){rep(0.50,length(x)) + theta}
-
-
