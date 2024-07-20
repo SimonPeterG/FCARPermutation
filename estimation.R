@@ -12,7 +12,7 @@ numcores <- detectCores()
 #Both GC
 
 f11 <- function(x,theta=0){rep(-0.3,length(x)) + theta}
-f12 <- function(x,theta=0){0.6*exp(-(0.30 + theta)*x^2)} 
+f12 <- function(x,theta=0){(1e-3)/(1 + exp(-x))}#{0.6*exp(-(0.30 + theta)*x^2)} 
 f21 <- function(x,theta=0){rep(-0.2,length(x)) + theta}
 f22 <- function(x,theta=0){-0.4*exp(-(0.45 + theta)*x^2)}
 
@@ -26,18 +26,23 @@ Y1 <- mydata[[1]][, 1]
 Y2 <- mydata[[1]][, 2]
 
 u <- mydata[[2]][1:(length(Y1) - 2)]
-h <- (max(u) - min(u)) * .2
+h <- (max(u) - min(u)) * .1
 X <- matrix(0, ncol = 2, nrow = length(Y1) - 2)
 for (i in 1:nrow(X)) {
     X[i, ] <- c(Y1[i+1], Y2[i+1])
 }
 
 Y1 <- Y1[-(1:2)]
-Y2 <- 
-fit <- fcar.fit(Y1, X, u, epanechnikov, h)
+fit <- fcar.fit(Y1, X, u, gaussian, h)
+
 ts.plot(Y1)
 lines(fit$yhat, col = "red")
 
-plot(fit$functional_points, f22(fit$functional_points))
-lines(fit$functional_points, fit$coeffs)
+plot(fit$functional_points, f11(fit$functional_points), ylim = c(-.3 - .5, -.3 + .5))
+lines(fit$functional_points, fit$coeffs[1, ])
 
+plot(fit$functional_points, f12(fit$functional_points))
+
+plot(fit$functional_points, fit$coeffs[2, ])
+
+lines(fit$functional_points, fit$coeffs[2, ])

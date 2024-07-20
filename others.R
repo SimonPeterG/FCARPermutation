@@ -85,3 +85,9 @@ lines(lol$mat_Yhat[, 1], col = "red")
 myest
 sum(sapply(1:4, function(Q) APEq(mydata[[1]], mydata[[2]], 1, 2, Q)))
 1000 - 100*1 
+
+hist(tmp$ref.distribution1)
+abline(v = tmp$null.stat1)
+
+hist(tmp$ref.distribution2)
+abline(v = tmp$null.stat2)

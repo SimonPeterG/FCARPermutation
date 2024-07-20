@@ -5,7 +5,7 @@ library(doParallel)
 library(Rcpp)
 source("auxiliary_functions.R")
 
-niters <- 100
+niters <- 2
 numcores <- detectCores()
 ##### Functional coefficients - EXPAR 
 
@@ -37,7 +37,10 @@ Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
 registerDoParallel(numcores)
 
-expar1 <- foreach(i = 1:niters) %dopar% {
+set.seed(i)
+tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
+
+expar1 <- foreach(i = 1:1) %dopar% {
     set.seed(i)
     tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
     print(paste0("Iteration ", i, " completed"))

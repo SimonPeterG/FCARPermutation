@@ -35,11 +35,34 @@ epanechnikov <- Vectorize(
     }, vectorize.args = c("u")
 )
 
+gaussian <- Vectorize({
+  function(u, h) {
+    dnorm(u/h)/h
+  }
+})
+
 get.coefficients <- function(uo, y, X, u, kernel.function, h) {
     W <- diag(kernel.function(u - uo, h))
     X.tilde <- cbind(X, X * (u - uo))
     tmp <- MASS::ginv(t(X.tilde) %*% W %*% X.tilde) %*% t(X.tilde) %*% W %*% y
     tmp[1:(nrow(tmp)/2), ]
+}
+
+block_permute2 <- function(x, block_size){
+    n <- length(x)
+    nblocks <- n %/% block_size
+    res <- numeric(n)
+    curr_idx <- 1
+    permuted_blocks <- sample(1:nblocks)
+    for (i in permuted_blocks) {
+        start_block <- (i - 1) * block_size + 1
+        end_block <- start_block + block_size - 1
+        if (i == nblocks) end_block <- n
+        block <- x[start_block:end_block]
+        res[curr_idx:(curr_idx + length(block) - 1)] <- block
+        curr_idx <- curr_idx + length(block)
+    }
+    res
 }
 
 fcar.fit <- function(y, X, u, kernel.function, h, p = 1, k = 2, npoints = 75) {
@@ -81,24 +104,24 @@ mse <- function(x, y) {
 gen_permutation <- function(X, cols.to.permute = NA) {
     idx <- 1:nrow(X)
     for (i in cols.to.permute) {
-      X[, i] <- X[, i][sample(idx)]
+      X[, i] <- block_permute2(X[, i], 100)
     }
   X
 }
 
 permutation.test <- function(Y1, Y2, u, X, kernel.function, h, npoints = 75, P = 500) {
   
-  fit1 <- fcar.fit(Y1, X, u, kernel.function, h, npoints)
-  fit2 <- fcar.fit(Y2, X, u, kernel.function, h, npoints)
+  fit1 <- fcar.fit(Y1, X, u, kernel.function, h, npoints = npoints)
+  fit2 <- fcar.fit(Y2, X, u, kernel.function, h, npoints = npoints)
   null.resid1 <- sum((fit1$residuals)^2)
   null.resid2 <-  sum((fit2$residuals)^2)
   resids1 <- numeric(P)
   resids2 <- numeric(P)
   
   for (i in 1:P) {
-    if (i %% 250 == 0) print(paste0("Iteration: ", i))
-    temp.fit1 <- fcar.fit(Y1, gen_permutation(X, 2), u, epanechnikov, h, npoints)
-    temp.fit2 <- fcar.fit(Y2, gen_permutation(X, 1), u, epanechnikov, h, npoints)
+    if (i %% 10 == 0) print(paste0("Iteration: ", i))
+    temp.fit1 <- fcar.fit(Y1, gen_permutation(X, 2), u, epanechnikov, h, npoints = npoints)
+    temp.fit2 <- fcar.fit(Y2, gen_permutation(X, 1), u, epanechnikov, h, npoints = npoints)
     resids1[i] <- sum(temp.fit1$residuals^2)
     resids2[i] <- sum(temp.fit2$residuals^2)
   }
