@@ -60,3 +60,6 @@ k.tmp <- function(u, h) {
 sizas <- fvcar.fit(mydata[[1]], mydata[[2]], k.tmp, 1, 2)
 plot(sizas$functional_points, f21(sizas$functional_points), ylim = c(-.5, .5))
 plot(sizas$functional_points, sizas$coeffs[2, 1,])
+
+
+

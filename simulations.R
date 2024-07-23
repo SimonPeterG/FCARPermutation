@@ -37,10 +37,21 @@ Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
 registerDoParallel(numcores)
 
-set.seed(i)
-tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
+set.seed(10)
+ex1 <- permutation.test(Y1, Y2, u, X, gaussian, h, 10, P = 500)
 
-expar1 <- foreach(i = 1:1) %dopar% {
+ex1$null.stat1
+range(ex1$ref.distribution1)
+hist(ex1$ref.distribution1)
+abline(v = ex1$null.stat1, col = "red")
+
+ex1$null.stat2
+range(ex1$ref.distribution2)
+hist(ex1$ref.distribution2, xlim = c(-2, 55))
+abline(v = ex1$null.stat2, col = "red")
+
+
+expar1 <- foreachx(i = 1:1) %dopar% {
     set.seed(i)
     tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
     print(paste0("Iteration ", i, " completed"))
@@ -64,7 +75,7 @@ Y1 <- mydata[[1]][, 1]
 Y2 <- mydata[[1]][, 2]
 
 u <- mydata[[2]][1:(length(Y1) - 2)]
-h <- (max(u) - min(u)) * .1
+h <- (max(u) - min(u)) * .2
 X <- matrix(0, ncol = 2, nrow = length(Y1) - 2)
 for (i in 1:nrow(X)) {
     X[i, ] <- c(Y1[i+1], Y2[i+1])
@@ -79,6 +90,20 @@ expar2 <- foreach(i = 1:niters) %dopar% {
     print(paste0("Iteration ", i, " completed"))
     tmp
 }
+
+set.seed(10)
+ex2 <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
+
+ex2$null.stat1
+range(ex2$ref.distribution1)
+hist(ex2$ref.distribution1)
+abline(v = ex2$null.stat1, col = "red")
+
+ex2$null.stat2
+range(ex2$ref.distribution2)
+hist(ex2$ref.distribution2)
+abline(v = ex2$null.stat2, col = "red")
+
 
 saveRDS(expar2, "results/expar2.Rds")
 
