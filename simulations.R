@@ -5,8 +5,9 @@ library(doParallel)
 library(Rcpp)
 source("auxiliary_functions.R")
 
-niters <- 2
+niters <- 100
 numcores <- detectCores()
+block.sizes <- c(10, 50, 100, 256)
 ##### Functional coefficients - EXPAR 
 
 # only Y2 GC Y1
@@ -17,8 +18,8 @@ f21 <- function(x,theta=0){rep(-0.2,length(x)) + theta}
 f22 <- function(x,theta=0){-0.4*exp(-(0.45 + theta)*x^2)}
 
 
-set.seed(1234)
-mydata <- gendata(Tlength = 1000,d = 2,Y_d = 0,
+set.seed(1)
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 0,
                   f11 = f11, f12 = f12, f21 = f21, f22 = f22)
 
 Y1 <- mydata[[1]][, 1]
@@ -35,9 +36,6 @@ Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
 
-registerDoParallel(numcores)
-
-set.seed(10)
 ex1 <- permutation.test(Y1, Y2, u, X, gaussian, h, 10, P = 500)
 
 ex1$null.stat1
@@ -51,14 +49,19 @@ hist(ex1$ref.distribution2, xlim = c(-2, 55))
 abline(v = ex1$null.stat2, col = "red")
 
 
-expar1 <- foreachx(i = 1:1) %dopar% {
-    set.seed(i)
-    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
-    print(paste0("Iteration ", i, " completed"))
-    tmp
-}
+#simulation of first scenario
 
-saveRDS(expar1, "results/expar1.Rds")
+expar1b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[1], ".Rds"))
+
+expar1b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[2], ".Rds"))
+
+expar1b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[3], ".Rds"))
+
+expar1b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[4], ".Rds"))
 
 #There is no GC
 
@@ -67,8 +70,8 @@ f12 <- function(x,theta=0){rep(0, length(x))}
 f21 <- function(x,theta=0){rep(0, length(x)) + theta}
 f22 <- function(x,theta=0){-0.4*exp(-(0.45 + theta)*x^2)}
 
-set.seed(7)
-mydata <- gendata(Tlength = 1000,d = 2,Y_d = 0,
+set.seed(1)
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 0,
                   f11 = f11, f12 = f12, f21 = f21, f22 = f22)
 
 Y1 <- mydata[[1]][, 1]
@@ -84,15 +87,8 @@ for (i in 1:nrow(X)) {
 Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
-expar2 <- foreach(i = 1:niters) %dopar% {
-    set.seed(i)
-    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
-    print(paste0("Iteration ", i, " completed"))
-    tmp
-}
-
 set.seed(10)
-ex2 <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
+ex2 <- permutation.test(Y1, Y2, u, X, epanechnikov, h, block.sizes[1], P = 1000)
 
 ex2$null.stat1
 range(ex2$ref.distribution1)
@@ -104,8 +100,18 @@ range(ex2$ref.distribution2)
 hist(ex2$ref.distribution2)
 abline(v = ex2$null.stat2, col = "red")
 
+#simulation of the second scenario
+expar1b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[1], ".Rds"))
 
-saveRDS(expar2, "results/expar2.Rds")
+expar1b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[2], ".Rds"))
+
+expar1b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[3], ".Rds"))
+
+expar1b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(expar1b1, paste0("results/expar1_", block.sizes[4], ".Rds"))
 
 #Both GC
 

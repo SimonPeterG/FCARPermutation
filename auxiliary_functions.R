@@ -134,7 +134,7 @@ permutation.test <- function(Y1, Y2, u, X, kernel.function, h, nblocks, npoints 
   F2 <- numeric(P)
   
   for (i in 1:P) {
-    if (i %% 10 == 0) print(paste0("Iteration: ", i))
+    if (i %% 100 == 0) print(paste0("Iteration: ", i))
     temp.fit1 <- fcar.fit(Y1, gen_permutation(X, nblocks, 2), u, kernel.function, h, npoints = npoints)
     temp.fit2 <- fcar.fit(Y2, gen_permutation(X, nblocks, 1), u, kernel.function, h, npoints = npoints)
     per.resid1 <- sum(temp.fit1$residuals^2)
@@ -146,7 +146,6 @@ permutation.test <- function(Y1, Y2, u, X, kernel.function, h, nblocks, npoints 
   print("after the foor loop")
 
   list(null.stat1 = Fobs1, null.stat2 = Fobs2,
-  fit1 = fit1, fit2 = fit2,
   ref.distribution1 = F1,
   ref.distribution2 = F2)
 }
@@ -166,6 +165,28 @@ individual.permutation <- function(Y1, u, X, kernel.function, h, cols, p = 1, k 
   as.numeric(null.resid1 < quantile(resids1, probs = c(0.05)))
 }
 
+gc.test <- function(nblock, niters, numcores, Tlength, P) {
+  registerDoParallel(numcores)
+  foreach(i = 1:niters) %dopar% {
+      print(paste("The value of i is", i))
+      set.seed(i)
+      mydata <- gendata(Tlength = Tlength,d = 2,Y_d = 0,
+            f11 = f11, f12 = f12, f21 = f21, f22 = f22)
+      Y1 <- mydata[[1]][, 1]
+      Y2 <- mydata[[1]][, 2]
+      u <- mydata[[2]][1:(length(Y1) - 2)]
+      h <- (max(u) - min(u)) * .2
+      X <- matrix(0, ncol = 2, nrow = length(Y1) - 2)
+      for (j in 1:nrow(X)) {
+          X[j, ] <- c(Y1[j+1], Y2[j+1])
+      }
+      Y1 <- matrix(Y1[-(1:2)], ncol = 1)
+      Y2 <- matrix(Y2[-(1:2)], ncol = 1)
+      tmp <- permutation.test(Y1, Y2, u, X, gaussian, h, nblock, P = P)
+      print(paste0("Iteration ", i, " completed"))
+      tmp
+  }
+}
 
 ##### Estimating multivariate FAR model locally at u0
 ## Inputs
