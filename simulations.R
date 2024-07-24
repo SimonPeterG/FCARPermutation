@@ -101,17 +101,17 @@ hist(ex2$ref.distribution2)
 abline(v = ex2$null.stat2, col = "red")
 
 #simulation of the second scenario
-expar1b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
-saveRDS(expar1b1, paste0("results/expar1_", block.sizes[1], ".Rds"))
+expar2b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(expar2b1, paste0("results/expar2_", block.sizes[1], ".Rds"))
 
-expar1b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
-saveRDS(expar1b1, paste0("results/expar1_", block.sizes[2], ".Rds"))
+expar2b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(expar2b1, paste0("results/expar2_", block.sizes[2], ".Rds"))
 
-expar1b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
-saveRDS(expar1b1, paste0("results/expar1_", block.sizes[3], ".Rds"))
+expar2b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(expar2b1, paste0("results/expar2_", block.sizes[3], ".Rds"))
 
-expar1b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
-saveRDS(expar1b1, paste0("results/expar1_", block.sizes[4], ".Rds"))
+expar2b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(expar2b1, paste0("results/expar2_", block.sizes[4], ".Rds"))
 
 #Both GC
 
