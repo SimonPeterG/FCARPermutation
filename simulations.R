@@ -105,13 +105,13 @@ expar2b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
 saveRDS(expar2b1, paste0("results/expar2_", block.sizes[1], ".Rds"))
 
 expar2b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
-saveRDS(expar2b1, paste0("results/expar2_", block.sizes[2], ".Rds"))
+saveRDS(expar2b2, paste0("results/expar2_", block.sizes[2], ".Rds"))
 
 expar2b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
-saveRDS(expar2b1, paste0("results/expar2_", block.sizes[3], ".Rds"))
+saveRDS(expar2b3, paste0("results/expar2_", block.sizes[3], ".Rds"))
 
 expar2b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
-saveRDS(expar2b1, paste0("results/expar2_", block.sizes[4], ".Rds"))
+saveRDS(expar2b4, paste0("results/expar2_", block.sizes[4], ".Rds"))
 
 #Both GC
 
