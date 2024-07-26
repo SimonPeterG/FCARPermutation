@@ -156,7 +156,7 @@ f21 <- function(x,theta=0){rep(0, length(x)) + theta}
 f22 <- function(x,theta=0){rep(0.3,length(x)) + theta}
 
 set.seed(4321)
-mydata <- gendata(Tlength = 1000,d = 2,Y_d = 2,
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 2,
                   f11 = f11, f12 = f12, f21 = f21, f22 = f22)
 
 Y1 <- mydata[[1]][, 1]
@@ -172,24 +172,43 @@ for (i in 1:nrow(X)) {
 Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
-logis1 <- foreach(i = 1:niters) %dopar% {
-    set.seed(i)
-    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
-    print(paste0("Iteration ", i, " completed"))
-    tmp
-}
-saveRDS(logis1, "results/logis1.Rds")
+set.seed(10)
+ex4 <- permutation.test(Y1, Y2, u, X, gaussian, h, block.sizes[1], P = 1000)
+
+ex4$null.stat1
+range(ex4$ref.distribution1)
+hist(ex4$ref.distribution1)
+abline(v = ex4$null.stat1, col = "red")
+
+ex4$null.stat2
+range(ex4$ref.distribution2)
+hist(ex4$ref.distribution2)
+abline(v = ex4$null.stat2, col = "red")
+
+#simulation of first scenario
+
+logis1b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(logis1b1, paste0("results/logis1_", block.sizes[1], ".Rds"))
+
+logis1b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(logis1b1, paste0("results/logis1_", block.sizes[2], ".Rds"))
+
+logis1b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(logis1b1, paste0("results/logis1_", block.sizes[3], ".Rds"))
+
+logis1b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(logis1b1, paste0("results/logis1_", block.sizes[4], ".Rds"))
 
 # There is no GC
 
 f11 <- function(x,theta=0){0.8*((exp((5 + theta)*x))/(1+exp((5 + theta)*x)))-0.3}
-f12 <- function(x,theta=0){rep(0.2,length(x)) + theta}
-f21 <- function(x,theta=0){-0.9*((exp((5 + theta)*x))/(1+exp((5 + theta)*x)))+0.5}
+f12 <- function(x,theta=0){rep(0,length(x)) + theta}
+f21 <- function(x,theta=0){rep(0,length(x)) + theta}
 f22 <- function(x,theta=0){rep(0.3,length(x)) + theta}
 
 
 set.seed(951413)
-mydata <- gendata(Tlength = 1000,d = 2,Y_d = 2,
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 2,
                   f11 = f11, f12 = f12, f21 = f21, f22 = f22)
 
 Y1 <- mydata[[1]][, 1]
@@ -205,14 +224,32 @@ for (i in 1:nrow(X)) {
 Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
-logis2 <- foreach(i = 1:niters) %dopar% {
-    set.seed(i)
-    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
-    print(paste0("Iteration ", i, " completed"))
-    tmp
-}
+set.seed(1771)
+ex5 <- permutation.test(Y1, Y2, u, X, gaussian, h, block.sizes[1], P = 1000)
 
-saveRDS(logis2, "results/logis2.Rds")
+ex5$null.stat1
+range(ex5$ref.distribution1)
+hist(ex5$ref.distribution1)
+abline(v = ex5$null.stat1, col = "red")
+
+ex5$null.stat2
+range(ex5$ref.distribution2)
+hist(ex5$ref.distribution2)
+abline(v = ex5$null.stat2, col = "red")
+
+#simulation of second scenario
+
+logis2b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(logis2b1, paste0("results/logis2_", block.sizes[1], ".Rds"))
+
+logis2b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(logis2b1, paste0("results/logis2_", block.sizes[2], ".Rds"))
+
+logis2b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(logis2b1, paste0("results/logis2_", block.sizes[3], ".Rds"))
+
+logis2b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(logis2b1, paste0("results/logis2_", block.sizes[4], ".Rds"))
 
 
 # Both GC
@@ -223,7 +260,7 @@ f21 <- function(x,theta=0){-0.9*((exp((5 + theta)*x))/(1+exp((5 + theta)*x)))+0.
 f22 <- function(x,theta=0){rep(0.3,length(x)) + theta}
 
 set.seed(1212)
-mydata <- gendata(Tlength = 1000,d = 2,Y_d = 2,
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 2,
                   f11 = f11, f12 = f12, f21 = f21, f22 = f22)
 
 Y1 <- mydata[[1]][, 1]
@@ -239,11 +276,29 @@ for (i in 1:nrow(X)) {
 Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
-logis3 <- foreach(i = 1:niters) %dopar% {
-    set.seed(i)
-    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
-    print(paste0("Iteration ", i, " completed"))
-    tmp
-}
+set.seed(7117)
+ex6 <- permutation.test(Y1, Y2, u, X, gaussian, h, block.sizes[1], P = 1000)
 
-saveRDS(logis3 , "results/logis3.Rds")
+ex6$null.stat1
+range(ex6$ref.distribution1)
+hist(ex6$ref.distribution1)
+abline(v = ex6$null.stat1, col = "red")
+
+ex6$null.stat2
+range(ex6$ref.distribution2)
+hist(ex6$ref.distribution2)
+abline(v = ex6$null.stat2, col = "red")
+
+#simulation of third scenario
+
+logis3b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(logis3b1, paste0("results/logis3_", block.sizes[1], ".Rds"))
+
+logis3b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(logis3b1, paste0("results/logis3_", block.sizes[2], ".Rds"))
+
+logis3b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(logis3b1, paste0("results/logis3_", block.sizes[3], ".Rds"))
+
+logis3b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(logis3b1, paste0("results/logis3_", block.sizes[4], ".Rds"))
