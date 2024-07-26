@@ -121,7 +121,7 @@ f21 <- function(x,theta=0){rep(-0.2,length(x)) + theta}
 f22 <- function(x,theta=0){-0.4*exp(-(0.45 + theta)*x^2)}
 
 set.seed(1234)
-mydata <- gendata(Tlength = 1000,d = 2,Y_d = 0,
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 0,
                   f11 = f11, f12 = f12, f21 = f21, f22 = f22)
 
 Y1 <- mydata[[1]][, 1]
@@ -137,14 +137,31 @@ for (i in 1:nrow(X)) {
 Y1 <- matrix(Y1[-(1:2)], ncol = 1)
 Y2 <- matrix(Y2[-(1:2)], ncol = 1)
 
-expar3 <- foreach(i = 1:niters) %dopar% {
-    set.seed(i)
-    tmp <- permutation.test(Y1, Y2, u, X, epanechnikov, h, P = 500)
-    print(paste0("Iteration ", i, " completed"))
-    tmp
-}
+set.seed(11)
+ex3 <- permutation.test(Y1, Y2, u, X, epanechnikov, h, block.sizes[1], P = 1000)
 
-saveRDS(expar3, "results/expar3.Rds")
+ex3$null.stat1
+range(ex3$ref.distribution1)
+hist(ex3$ref.distribution1)
+abline(v = ex3$null.stat1, col = "red")
+
+ex3$null.stat2
+range(ex3$ref.distribution2)
+hist(ex3$ref.distribution2)
+abline(v = ex3$null.stat2, col = "red")
+
+#simulation of the third scenario
+expar3b1 <- gc.test(block.sizes[1], niters, numcores, 256, 1000)
+saveRDS(expar3b1, paste0("results/expar3_", block.sizes[1], ".Rds"))
+
+expar3b2 <- gc.test(block.sizes[2], niters, numcores, 256, 1000)
+saveRDS(expar3b2, paste0("results/expar3_", block.sizes[2], ".Rds"))
+
+expar3b3 <- gc.test(block.sizes[3], niters, numcores, 256, 1000)
+saveRDS(expar3b3, paste0("results/expar3_", block.sizes[3], ".Rds"))
+
+expar3b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
+saveRDS(expar3b4, paste0("results/expar3_", block.sizes[4], ".Rds"))
 
 ##### Functional coefficients - Logistic
 
