@@ -15,21 +15,21 @@ expar1 <- function(x) {
   ), byrow = T, ncol = 2)
 }
 
-set.seed(1234)
-ex1 <- simulate.far(256, 2, 0, 1, 1, list(expar1))
+# set.seed(1234)
+# ex1 <- simulate.far(256, 2, 0, 1, 1, list(expar1))
 
-per.test1 <- permutation.test(ex1$ts, ex1$ref, gaussian, .2, ex1$p, ex1$p.u, 
-                              function(x) block_permute1(x, 10), P = 1000)
+# per.test1 <- permutation.test(ex1$ts, ex1$ref, gaussian, .2, ex1$p, ex1$p.u, 
+#                               function(x) block_permute1(x, 10), P = 1000)
 
-per.test1$null.stat1
-range(per.test1$ref.distribution1)
-mean(per.test1$ref.distribution1 >= per.test1$null.stat1)
-mean(per.test1$ref.distribution1 >= per.test1$null.stat1) < 0.05
+# per.test1$null.stat1
+# range(per.test1$ref.distribution1)
+# mean(per.test1$ref.distribution1 >= per.test1$null.stat1)
+# mean(per.test1$ref.distribution1 >= per.test1$null.stat1) < 0.05
 
-per.test1$null.stat2
-range(per.test1$ref.distribution2)
-mean(per.test1$ref.distribution2 >= per.test1$null.stat2)
-mean(per.test1$ref.distribution2 >= per.test1$null.stat2) < 0.05
+# per.test1$null.stat2
+# range(per.test1$ref.distribution2)
+# mean(per.test1$ref.distribution2 >= per.test1$null.stat2)
+# mean(per.test1$ref.distribution2 >= per.test1$null.stat2) < 0.05
 
 #simulation of first scenario
 
@@ -55,21 +55,21 @@ expar2 <- function(x) {
   ), byrow = T, ncol = 2)
 }
 
-set.seed(314)
-ex2 <- simulate.far(256, 2, 0, 1, 1, list(expar2))
+# set.seed(314)
+# ex2 <- simulate.far(256, 2, 0, 1, 1, list(expar2))
 
-per.test2 <- permutation.test(ex2$ts, ex2$ref, gaussian, .2, ex2$p, ex2$p.u, 
-                              function(x) block_permute1(x, 10), P = 1000)
+# per.test2 <- permutation.test(ex2$ts, ex2$ref, gaussian, .2, ex2$p, ex2$p.u, 
+#                               function(x) block_permute1(x, 10), P = 1000)
 
-per.test2$null.stat1
-range(per.test2$ref.distribution1)
-mean(per.test2$ref.distribution1 >= per.test2$null.stat1)
-mean(per.test2$ref.distribution1 >= per.test2$null.stat1) < 0.05
+# per.test2$null.stat1
+# range(per.test2$ref.distribution1)
+# mean(per.test2$ref.distribution1 >= per.test2$null.stat1)
+# mean(per.test2$ref.distribution1 >= per.test2$null.stat1) < 0.05
 
-per.test2$null.stat2
-range(per.test2$ref.distribution2)
-mean(per.test2$ref.distribution2 >= per.test2$null.stat2)
-mean(per.test2$ref.distribution2 >= per.test2$null.stat2) < 0.05
+# per.test2$null.stat2
+# range(per.test2$ref.distribution2)
+# mean(per.test2$ref.distribution2 >= per.test2$null.stat2)
+# mean(per.test2$ref.distribution2 >= per.test2$null.stat2) < 0.05
 
 #simulation of the second scenario
 expar2b1 <- gc.test(niters, numcores, 256, block.sizes[1], 
@@ -94,21 +94,21 @@ expar3 <- function(x) {
 }
 
 
-set.seed(69)
-ex3 <- simulate.far(256, 2, 0, 1, 1, list(expar3))
+# set.seed(69)
+# ex3 <- simulate.far(256, 2, 0, 1, 1, list(expar3))
 
-per.test3 <- permutation.test(ex3$ts, ex3$ref, gaussian, .2, ex3$p, ex3$p.u, 
-                              function(x) block_permute1(x, 10), P = 1000)
+# per.test3 <- permutation.test(ex3$ts, ex3$ref, gaussian, .2, ex3$p, ex3$p.u, 
+#                               function(x) block_permute1(x, 10), P = 1000)
 
-per.test3$null.stat1
-range(per.test3$ref.distribution1)
-mean(per.test3$ref.distribution1 >= per.test3$null.stat1)
-mean(per.test3$ref.distribution1 >= per.test3$null.stat1) < 0.05
+# per.test3$null.stat1
+# range(per.test3$ref.distribution1)
+# mean(per.test3$ref.distribution1 >= per.test3$null.stat1)
+# mean(per.test3$ref.distribution1 >= per.test3$null.stat1) < 0.05
 
-per.test3$null.stat2
-range(per.test3$ref.distribution2)
-mean(per.test3$ref.distribution2 >= per.test3$null.stat2)
-mean(per.test3$ref.distribution2 >= per.test3$null.stat2) < 0.05
+# per.test3$null.stat2
+# range(per.test3$ref.distribution2)
+# mean(per.test3$ref.distribution2 >= per.test3$null.stat2)
+# mean(per.test3$ref.distribution2 >= per.test3$null.stat2) < 0.05
 
 #simulation of the third scenario
 expar3b1 <- gc.test(niters, numcores, 256, block.sizes[1], 
@@ -134,21 +134,21 @@ logis1 <- function(x) {
   ), byrow = T, ncol = 2)
 }
 
-set.seed(7)
-ex4 <- simulate.far(256, 2, 0, 1, 1, list(logis1))
+# set.seed(7)
+# ex4 <- simulate.far(256, 2, 0, 1, 1, list(logis1))
 
-per.test4 <- permutation.test(ex4$ts, ex4$ref, gaussian, .2, ex4$p, ex4$p.u, 
-                              function(x) block_permute1(x, 10), P = 1000)
+# per.test4 <- permutation.test(ex4$ts, ex4$ref, gaussian, .2, ex4$p, ex4$p.u, 
+#                               function(x) block_permute1(x, 10), P = 1000)
 
-per.test4$null.stat1
-range(per.test4$ref.distribution1)
-mean(per.test4$ref.distribution1 >= per.test4$null.stat1)
-mean(per.test4$ref.distribution1 >= per.test4$null.stat1) < 0.05
+# per.test4$null.stat1
+# range(per.test4$ref.distribution1)
+# mean(per.test4$ref.distribution1 >= per.test4$null.stat1)
+# mean(per.test4$ref.distribution1 >= per.test4$null.stat1) < 0.05
 
-per.test4$null.stat2
-range(per.test4$ref.distribution2)
-mean(per.test4$ref.distribution2 >= per.test4$null.stat2)
-mean(per.test4$ref.distribution2 >= per.test4$null.stat2) < 0.05
+# per.test4$null.stat2
+# range(per.test4$ref.distribution2)
+# mean(per.test4$ref.distribution2 >= per.test4$null.stat2)
+# mean(per.test4$ref.distribution2 >= per.test4$null.stat2) < 0.05
 
 #simulation of first scenario
 
@@ -174,21 +174,21 @@ logis2 <- function(x) {
   ), byrow = T, ncol = 2)
 }
 
-set.seed(1221)
-ex5 <- simulate.far(256, 2, 0, 1, 1, list(logis2))
+# set.seed(1221)
+# ex5 <- simulate.far(256, 2, 0, 1, 1, list(logis2))
 
-per.test5 <- permutation.test(ex5$ts, ex5$ref, gaussian, .2, ex5$p, ex5$p.u, 
-                              function(x) block_permute1(x, 10), P = 1000)
+# per.test5 <- permutation.test(ex5$ts, ex5$ref, gaussian, .2, ex5$p, ex5$p.u, 
+#                               function(x) block_permute1(x, 10), P = 1000)
 
-per.test5$null.stat1
-range(per.test5$ref.distribution1)
-mean(per.test5$ref.distribution1 >= per.test5$null.stat1)
-mean(per.test5$ref.distribution1 >= per.test5$null.stat1) < 0.05
+# per.test5$null.stat1
+# range(per.test5$ref.distribution1)
+# mean(per.test5$ref.distribution1 >= per.test5$null.stat1)
+# mean(per.test5$ref.distribution1 >= per.test5$null.stat1) < 0.05
 
-per.test5$null.stat2
-range(per.test5$ref.distribution2)
-mean(per.test5$ref.distribution2 >= per.test5$null.stat2)
-mean(per.test5$ref.distribution2 >= per.test5$null.stat2) < 0.05
+# per.test5$null.stat2
+# range(per.test5$ref.distribution2)
+# mean(per.test5$ref.distribution2 >= per.test5$null.stat2)
+# mean(per.test5$ref.distribution2 >= per.test5$null.stat2) < 0.05
 
 #simulation of the second scenario
 logis2b1 <- gc.test(niters, numcores, 256, block.sizes[1], 
@@ -213,21 +213,21 @@ logis3 <- function(x) {
 }
 
 
-set.seed(69)
-ex6 <- simulate.far(256, 2, 0, 1, 1, list(logis3))
+# set.seed(69)
+# ex6 <- simulate.far(256, 2, 0, 1, 1, list(logis3))
 
-per.test6 <- permutation.test(ex6$ts, ex6$ref, gaussian, .2, ex6$p, ex6$p.u, 
-                              function(x) block_permute1(x, 10), P = 1000)
+# per.test6 <- permutation.test(ex6$ts, ex6$ref, gaussian, .2, ex6$p, ex6$p.u, 
+#                               function(x) block_permute1(x, 10), P = 1000)
 
-per.test6$null.stat1
-range(per.test6$ref.distribution1)
-mean(per.test6$ref.distribution1 >= per.test6$null.stat1)
-mean(per.test6$ref.distribution1 >= per.test6$null.stat1) < 0.05
+# per.test6$null.stat1
+# range(per.test6$ref.distribution1)
+# mean(per.test6$ref.distribution1 >= per.test6$null.stat1)
+# mean(per.test6$ref.distribution1 >= per.test6$null.stat1) < 0.05
 
-per.test6$null.stat2
-range(per.test6$ref.distribution2)
-mean(per.test6$ref.distribution2 >= per.test6$null.stat2)
-mean(per.test6$ref.distribution2 >= per.test6$null.stat2) < 0.05
+# per.test6$null.stat2
+# range(per.test6$ref.distribution2)
+# mean(per.test6$ref.distribution2 >= per.test6$null.stat2)
+# mean(per.test6$ref.distribution2 >= per.test6$null.stat2) < 0.05
 
 #simulation of the third scenario
 logis3b1 <- gc.test(niters, numcores, 256, block.sizes[1], 
