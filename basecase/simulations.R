@@ -1,4 +1,5 @@
 rm(list = ls())
+setwd("./basecase")
 library(parallel)
 library(foreach)
 library(doParallel)
@@ -320,12 +321,5 @@ saveRDS(logis3b1, paste0("results/logis3_", block.sizes[3], ".Rds"))
 logis3b4 <- gc.test(block.sizes[4] - 2, niters, numcores, 256, 1000)
 saveRDS(logis3b1, paste0("results/logis3_", block.sizes[4], ".Rds"))
 
-periodicf <- function(x) {
-    x %% 12
-}
-
-pts <- -24:24
-layout(matrix(c(1)))
-plot(pts, periodicf(pts), ylab = c(-2, 14))
-
-
+setwd("./..")
+rm(list = ls())

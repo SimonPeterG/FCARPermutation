@@ -39,27 +39,29 @@ m2 <- function(u) {
     ), ncol = 2, byrow = T)
 }
 
-ex <- simulate.far(256, 2, 0, 2, 1, list(m1, m2))
+ex <- simulate.far(256, 2, 0, 3, 1, list(m1, m2, function(u) m1(u) + m2(u)))
 dim(ex$ts)
 length(ex$ref)
 ex$p.star
 
 X.ex <- generate.X(ex$ts, ex$p.star)
-u.ex <- ex$ref[1:(256 - 2)]
+u.ex <- ex$ref[1:(256 - ex$p.star)]
 h.ex <- (max(u.ex) - min(u.ex)) * .2
-y1.ex <- ex$ts[-(1:2), 1]
-y2.ex <- ex$ts[-(1:2), 2]
-f1 <- fcar.fit(y1.ex, X.ex, u.ex, gaussian, h.ex, ex$p.star)
+y1.ex <- ex$ts[-(1:ex$p.star), 1]
+y2.ex <- ex$ts[-(1:ex$p.star), 2]
+f1 <- fcar.fit(y1.ex, X.ex, u.ex, gaussian, h.ex, 2, k = 2)
 f2 <- fcar.fit(y2.ex, X.ex, u.ex, gaussian, h.ex, ex$p.star)
 
 ts.plot(y1.ex)
 lines(f1$yhat, col = "red")
 
-layout(matrix(1:4, ncol = 2, byrow = T))
+layout(matrix(1:6, ncol = 3, byrow = T))
 plot(f1$coeffs[1, ], type = "l", ylim = c(-1, 1))
 plot(f1$coeffs[2, ], type = "l", ylim = c(-1, 1))
 plot(f1$coeffs[3, ], type = "l", ylim = c(-1, 1))
 plot(f1$coeffs[4, ], type = "l", ylim = c(-1, 1))
+plot(f1$coeffs[5, ], type = "l", ylim = c(-1, 1))
+plot(f1$coeffs[6, ], type = "l", ylim = c(-1, 1))
 
 ts.plot(y2.ex)
 lines(f2$yhat, col = "red")
@@ -71,7 +73,4 @@ plot(f2$coeffs[3, ], type = "l", ylim = c(-1, 1))
 plot(f2$coeffs[4, ], type = "l", ylim = c(-1, 1))
 
 
-mse(y1.ex, f1$yhat)
-mse(y2.ex, f2$yhat)
-
-gc.ex <- permutation.test(y1.ex, y2.ex, u.ex, X.ex, gaussian, h.ex, 10, P = 1000)
+gc.ex <- permutation.test.new(y1.ex, y2.ex, u.ex, X.ex, gaussian, h.ex, 10, ex$p.star, 2, P = 1000)

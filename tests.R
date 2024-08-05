@@ -63,3 +63,47 @@ plot(sizas$functional_points, sizas$coeffs[2, 1,])
 
 
 
+####################################
+set.seed(1)
+mydata <- gendata(Tlength = 256,d = 2,Y_d = 0,
+                  f11 = f11, f12 = f12, f21 = f21, f22 = f22)
+
+Y1 <- mydata[[1]][, 1]
+Y2 <- mydata[[1]][, 2]
+
+u <- mydata[[2]][1:(length(Y1) - 2)]
+h <- (max(u) - min(u)) * .2
+X <- matrix(0, ncol = 2, nrow = length(Y1) - 2)
+for (i in 1:nrow(X)) {
+    X[i, ] <- c(Y1[i+1], Y2[i+1])
+}
+
+Y1 <- matrix(Y1[-(1:2)], ncol = 1)
+Y2 <- matrix(Y2[-(1:2)], ncol = 1)
+
+set.seed(7)
+ex1 <- permutation.test(Y1, Y2, u, X, gaussian, h, 10, P = 500)
+
+ex1$null.stat1
+range(ex1$ref.distribution1)
+hist(ex1$ref.distribution1)
+abline(v = ex1$null.stat1, col = "red")
+
+ex1$null.stat2
+range(ex1$ref.distribution2)
+hist(ex1$ref.distribution2, xlim = c(-2, 55))
+abline(v = ex1$null.stat2, col = "red")
+
+#other
+set.seed(7)
+ex1.new <- permutation.test.new(Y1, Y2, u, X, gaussian, h, 10, P = 500)
+
+ex1.new$null.stat1
+range(ex1.new$ref.distribution1)
+hist(ex1.new$ref.distribution1)
+abline(v = ex1.new$null.stat1, col = "red")
+
+ex1.new$null.stat2
+range(ex1.new$ref.distribution2)
+hist(ex1.new$ref.distribution2, xlim = c(-2, 55))
+abline(v = ex1.new$null.stat2, col = "red")

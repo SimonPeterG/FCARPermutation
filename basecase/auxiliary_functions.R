@@ -150,21 +150,6 @@ permutation.test <- function(Y1, Y2, u, X, kernel.function, h, nblocks, npoints 
   ref.distribution2 = F2)
 }
 
-individual.permutation <- function(Y1, u, X, kernel.function, h, cols, p = 1, k = 2, npoints = 75, P = 100) {
-  
-  fit1 <- fcar.fit(Y1, X, u, kernel.function, h, p, k, npoints)
-  null.resid1 <- sum((fit1$residuals)^2)
-  resids1 <- numeric(P)
-  
-  for (i in 1:P) {
-    if (i %% 250 == 0) print(paste0("Iteration: ", i))
-    temp.fit1 <- fcar.fit(Y1, gen_permutation(X, cols), u, epanechnikov, h, p, k, npoints)
-    resids1[i] <- sum(temp.fit1$residuals^2)
-  }
-
-  as.numeric(null.resid1 < quantile(resids1, probs = c(0.05)))
-}
-
 gc.test <- function(nblock, niters, numcores, Tlength, P) {
   registerDoParallel(numcores)
   foreach(i = 1:niters) %dopar% {
