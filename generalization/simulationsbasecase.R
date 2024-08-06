@@ -4,7 +4,7 @@ source("./auxiliary_functions.R")
 
 niters <- 100
 numcores <- detectCores()
-obs.per.block <- c(10, 50, 100)
+obs.per.block <- c(5, 10, 25)
 ##### Functional coefficients - EXPAR 
 
 # only Y1 GC Y2
