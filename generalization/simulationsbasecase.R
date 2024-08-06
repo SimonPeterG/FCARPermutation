@@ -134,21 +134,21 @@ logis1 <- function(x) {
   ), byrow = T, ncol = 2)
 }
 
-set.seed(7)
-ex4 <- simulate.far(256, 2, 0, 1, 1, list(logis1))
+# set.seed(7)
+# ex4 <- simulate.far(256, 2, 0, 1, 1, list(logis1))
 
-per.test4 <- permutation.test(ex4$ts, ex4$ref, gaussian, .2, ex4$p, ex4$p.u, 
-                              function(x) block_permute(x, 10), P = 1000)
+# per.test4 <- permutation.test(ex4$ts, ex4$ref, gaussian, .2, ex4$p, ex4$p.u, 
+#                               function(x) block_permute(x, 10), P = 1000)
 
-per.test4$null.stat1
-range(per.test4$ref.distribution1)
-mean(per.test4$ref.distribution1 >= per.test4$null.stat1)
-mean(per.test4$ref.distribution1 >= per.test4$null.stat1) < 0.05
+# per.test4$null.stat1
+# range(per.test4$ref.distribution1)
+# mean(per.test4$ref.distribution1 >= per.test4$null.stat1)
+# mean(per.test4$ref.distribution1 >= per.test4$null.stat1) < 0.05
 
-per.test4$null.stat2
-range(per.test4$ref.distribution2)
-mean(per.test4$ref.distribution2 >= per.test4$null.stat2)
-mean(per.test4$ref.distribution2 >= per.test4$null.stat2) < 0.05
+# per.test4$null.stat2
+# range(per.test4$ref.distribution2)
+# mean(per.test4$ref.distribution2 >= per.test4$null.stat2)
+# mean(per.test4$ref.distribution2 >= per.test4$null.stat2) < 0.05
 
 #simulation of first scenario
 
