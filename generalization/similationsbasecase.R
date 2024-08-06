@@ -4,7 +4,7 @@ source("./auxiliary_functions.R")
 
 niters <- 100
 numcores <- detectCores()
-block.sizes <- c(10, 50, 100)
+obs.per.block <- c(10, 50, 100)
 ##### Functional coefficients - EXPAR 
 
 # only Y1 GC Y2
@@ -33,18 +33,18 @@ expar1 <- function(x) {
 
 #simulation of first scenario
 
-expar1b1 <- gc.test.old(niters, numcores, 256, block.sizes[1], 
+expar1b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar1)), P = 1000)
 
-saveRDS(expar1b1, paste0("../results/basecasegen/expar1_", block.sizes[1], ".Rds"))
+saveRDS(expar1b1, paste0("../results/basecasegen/expar1_", obs.per.block[1], ".Rds"))
 
-expar1b2 <- gc.test.old(niters, numcores, 256, block.sizes[2], 
+expar1b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar1)), P = 1000)
-saveRDS(expar1b2, paste0("../results/basecasegen/expar1_", block.sizes[2], ".Rds"))
+saveRDS(expar1b2, paste0("../results/basecasegen/expar1_", obs.per.block[2], ".Rds"))
 
-expar1b3 <- gc.test.old(niters, numcores, 256, block.sizes[3], 
+expar1b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar1)), P = 1000)
-saveRDS(expar1b3, paste0("../results/basecasegen/expar1_", block.sizes[3], ".Rds"))
+saveRDS(expar1b3, paste0("../results/basecasegen/expar1_", obs.per.block[3], ".Rds"))
 
 #There is no GC
 
@@ -72,18 +72,18 @@ expar2 <- function(x) {
 # mean(per.test2$ref.distribution2 >= per.test2$null.stat2) < 0.05
 
 #simulation of the second scenario
-expar2b1 <- gc.test.old(niters, numcores, 256, block.sizes[1], 
+expar2b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar2)), P = 1000)
 
-saveRDS(expar2b1, paste0("../results/basecasegen/expar2_", block.sizes[1], ".Rds"))
+saveRDS(expar2b1, paste0("../results/basecasegen/expar2_", obs.per.block[1], ".Rds"))
 
-expar2b2 <- gc.test.old(niters, numcores, 256, block.sizes[2], 
+expar2b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar2)), P = 1000)
-saveRDS(expar2b2, paste0("../results/basecasegen/expar2_", block.sizes[2], ".Rds"))
+saveRDS(expar2b2, paste0("../results/basecasegen/expar2_", obs.per.block[2], ".Rds"))
 
-expar2b3 <- gc.test.old(niters, numcores, 256, block.sizes[3], 
+expar2b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar2)), P = 1000)
-saveRDS(expar2b3, paste0("../results/basecasegen/expar2_", block.sizes[3], ".Rds"))
+saveRDS(expar2b3, paste0("../results/basecasegen/expar2_", obs.per.block[3], ".Rds"))
 
 #Both GC
 expar3 <- function(x) {
@@ -111,18 +111,18 @@ expar3 <- function(x) {
 # mean(per.test3$ref.distribution2 >= per.test3$null.stat2) < 0.05
 
 #simulation of the third scenario
-expar3b1 <- gc.test.old(niters, numcores, 256, block.sizes[1], 
+expar3b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar3)), P = 1000)
 
-saveRDS(expar3b1, paste0("../results/basecasegen/expar3_", block.sizes[1], ".Rds"))
+saveRDS(expar3b1, paste0("../results/basecasegen/expar3_", obs.per.block[1], ".Rds"))
 
-expar3b2 <- gc.test.old(niters, numcores, 256, block.sizes[2], 
+expar3b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar3)), P = 1000)
-saveRDS(expar3b2, paste0("../results/basecasegen/expar3_", block.sizes[2], ".Rds"))
+saveRDS(expar3b2, paste0("../results/basecasegen/expar3_", obs.per.block[2], ".Rds"))
 
-expar3b3 <- gc.test.old(niters, numcores, 256, block.sizes[3], 
+expar3b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(expar3)), P = 1000)
-saveRDS(expar3b3, paste0("../results/basecasegen/expar3_", block.sizes[3], ".Rds"))
+saveRDS(expar3b3, paste0("../results/basecasegen/expar3_", obs.per.block[3], ".Rds"))
 
 ##### Functional coefficients - Logistic
 
@@ -152,18 +152,18 @@ logis1 <- function(x) {
 
 #simulation of first scenario
 
-logis1b1 <- gc.test.old(niters, numcores, 256, block.sizes[1], 
+logis1b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
 
-saveRDS(logis1b1, paste0("../results/basecasegen/logis1_", block.sizes[1], ".Rds"))
+saveRDS(logis1b1, paste0("../results/basecasegen/logis1_", obs.per.block[1], ".Rds"))
 
-logis1b2 <- gc.test.old(niters, numcores, 256, block.sizes[2], 
+logis1b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
-saveRDS(logis1b2, paste0("../results/basecasegen/logis1_", block.sizes[2], ".Rds"))
+saveRDS(logis1b2, paste0("../results/basecasegen/logis1_", obs.per.block[2], ".Rds"))
 
-logis1b3 <- gc.test.old(niters, numcores, 256, block.sizes[3], 
+logis1b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
-saveRDS(logis1b3, paste0("../results/basecasegen/logis1_", block.sizes[3], ".Rds"))
+saveRDS(logis1b3, paste0("../results/basecasegen/logis1_", obs.per.block[3], ".Rds"))
 
 #There is no GC
 
@@ -191,18 +191,18 @@ logis2 <- function(x) {
 # mean(per.test5$ref.distribution2 >= per.test5$null.stat2) < 0.05
 
 #simulation of the second scenario
-logis2b1 <- gc.test.old(niters, numcores, 256, block.sizes[1], 
+logis2b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
 
-saveRDS(logis2b1, paste0("../results/basecasegen/logis2_", block.sizes[1], ".Rds"))
+saveRDS(logis2b1, paste0("../results/basecasegen/logis2_", obs.per.block[1], ".Rds"))
 
-logis2b2 <- gc.test.old(niters, numcores, 256, block.sizes[2], 
+logis2b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
-saveRDS(logis2b2, paste0("../results/basecasegen/logis2_", block.sizes[2], ".Rds"))
+saveRDS(logis2b2, paste0("../results/basecasegen/logis2_", obs.per.block[2], ".Rds"))
 
-logis2b3 <- gc.test.old(niters, numcores, 256, block.sizes[3], 
+logis2b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
-saveRDS(logis2b3, paste0("../results/basecasegen/logis2_", block.sizes[3], ".Rds"))
+saveRDS(logis2b3, paste0("../results/basecasegen/logis2_", obs.per.block[3], ".Rds"))
 
 #Both GC
 logis3 <- function(x) {
@@ -230,18 +230,18 @@ logis3 <- function(x) {
 # mean(per.test6$ref.distribution2 >= per.test6$null.stat2) < 0.05
 
 #simulation of the third scenario
-logis3b1 <- gc.test.old(niters, numcores, 256, block.sizes[1], 
+logis3b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
 
-saveRDS(logis3b1, paste0("../results/basecasegen/logis3_", block.sizes[1], ".Rds"))
+saveRDS(logis3b1, paste0("../results/basecasegen/logis3_", obs.per.block[1], ".Rds"))
 
-logis3b2 <- gc.test.old(niters, numcores, 256, block.sizes[2], 
+logis3b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
-saveRDS(logis3b2, paste0("../results/basecasegen/logis3_", block.sizes[2], ".Rds"))
+saveRDS(logis3b2, paste0("../results/basecasegen/logis3_", obs.per.block[2], ".Rds"))
 
-logis3b3 <- gc.test.old(niters, numcores, 256, block.sizes[3], 
+logis3b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
-saveRDS(logis3b3, paste0("../results/basecasegen/logis3_", block.sizes[3], ".Rds"))
+saveRDS(logis3b3, paste0("../results/basecasegen/logis3_", obs.per.block[3], ".Rds"))
 
 setwd("./..")
 rm(list = ls())

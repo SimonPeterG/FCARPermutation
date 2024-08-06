@@ -107,3 +107,51 @@ ex1.new$null.stat2
 range(ex1.new$ref.distribution2)
 hist(ex1.new$ref.distribution2, xlim = c(-2, 55))
 abline(v = ex1.new$null.stat2, col = "red")
+
+###########################################################
+
+block_permute1 <- function(x, nblocks){
+    n <- length(x)
+    block_size <- n %/% nblocks
+    print(block_size)
+    res <- numeric(n)
+    curr_idx <- 1
+    permuted_blocks <- sample(1:nblocks)
+    print("Order of the permuted blocks") 
+    print(permuted_blocks)
+    print(paste(rep("=", 20), collapse = ""))
+    for (i in permuted_blocks) {
+        start_block <- (i - 1) * block_size + 1
+        end_block <- start_block + block_size - 1
+        if (i == nblocks) end_block <- n
+        block <- x[start_block:end_block]
+        res[curr_idx:(curr_idx + length(block) - 1)] <- block
+        print(range(curr_idx:(curr_idx + length(block) - 1)))
+        curr_idx <- curr_idx + length(block)
+    }
+    res
+}
+
+block_permute1(1:250, 100)
+
+block_permute2 <- function(x, block_size){
+    n <- length(x)
+    splits <- n %/% block_size
+    remainder <- n %% block_size
+    nblocks <- splits + (remainder > 0)
+    res <- numeric(n)
+    curr_idx <- 1
+    permuted_blocks <- sample(1:nblocks)
+    for (i in permuted_blocks) {
+        start_block <- (i - 1) * block_size + 1
+        end_block <- start_block + block_size - 1
+        if (i == nblocks) end_block <- n
+        block <- x[start_block:end_block]
+        res[curr_idx:(curr_idx + length(block) - 1)] <- block
+        curr_idx <- curr_idx + length(block)
+        
+    }
+    res
+}
+
+block_permute2(1:250, 26)

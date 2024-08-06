@@ -89,6 +89,26 @@ block_permute2 <- function(x, block_size){
     res
 }
 
+block_permute <- function(x, block_size){
+    n <- length(x)
+    splits <- n %/% block_size
+    remainder <- n %% block_size
+    nblocks <- splits + (remainder > 0)
+    res <- numeric(n)
+    curr_idx <- 1
+    permuted_blocks <- sample(1:nblocks)
+    for (i in permuted_blocks) {
+        start_block <- (i - 1) * block_size + 1
+        end_block <- start_block + block_size - 1
+        if (i == nblocks) end_block <- n
+        block <- x[start_block:end_block]
+        res[curr_idx:(curr_idx + length(block) - 1)] <- block
+        curr_idx <- curr_idx + length(block)
+        
+    }
+    res
+}
+
 gen_permutation <- function(X, permute = function(x) x, cols.to.permute = NULL) {
   
   if (is.null(dim(X))) {
@@ -180,7 +200,7 @@ permutation.test <- function(Y, u, kernel.function, h, p, p.u, permute, npoints 
   ref.distribution2 = F2)
 }
 
-gc.test <- function(niters, numcores, Tlength, nblock, sim.function, P) {
+gc.test <- function(niters, numcores, Tlength, obs.per.block, sim.function, P) {
   registerDoParallel(numcores)
   foreach(i = 1:niters) %dopar% {
       set.seed(i)
@@ -188,9 +208,23 @@ gc.test <- function(niters, numcores, Tlength, nblock, sim.function, P) {
       
       per.test <- permutation.test(gen.data$ts, gen.data$ref, gaussian, .2, 
                                    gen.data$p, gen.data$p.u, 
-                                   permute = function(x) block_permute1(x, nblock), P = P)
+                                   permute = function(x) block_permute(x, obs.per.block), P = P)
       print(paste0("Iteration ", i, " completed"))
       per.test
   }
 }
 
+#function was used on simulationslag1old.R
+# gc.test.old <- function(niters, numcores, Tlength, nblock, sim.function, P) {
+#   registerDoParallel(numcores)
+#   foreach(i = 1:niters) %dopar% {
+#       set.seed(i)
+#       gen.data <- sim.function(Tlength)
+      
+#       per.test <- permutation.test(gen.data$ts, gen.data$ref, gaussian, .2, 
+#                                    gen.data$p, gen.data$p.u, 
+#                                    permute = function(x) block_permute1(x, nblock), P = P)
+#       print(paste0("Iteration ", i, " completed"))
+#       per.test
+#   }
+# }
