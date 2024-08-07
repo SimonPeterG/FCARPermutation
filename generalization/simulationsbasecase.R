@@ -126,122 +126,122 @@ saveRDS(expar3b3, paste0("../results/basecasegen/expar3_", obs.per.block[3], ".R
 
 ##### Functional coefficients - Logistic
 
-# only Y1 GC Y2
-# logis1 <- function(x) {
-#   matrix(c(
-#     0.8*(exp(5*x)/(1+exp(5*x)))-0.3, 0,
-#     -0.9*(exp(5*x)/(1+exp(5*x)))+0.5, .3
-#   ), byrow = T, ncol = 2)
-# }
+#only Y1 GC Y2
+logis1 <- function(x) {
+  matrix(c(
+    0.8*(exp(5*x)/(1+exp(5*x)))-0.3, 0,
+    -0.9*(exp(5*x)/(1+exp(5*x)))+0.5, .3
+  ), byrow = T, ncol = 2)
+}
 
-# # set.seed(7)
-# # ex4 <- simulate.far(256, 2, 0, 1, 1, list(logis1))
+# set.seed(7)
+# ex4 <- simulate.far(256, 2, 0, 1, 1, list(logis1))
 
-# # per.test4 <- permutation.test(ex4$ts, ex4$ref, gaussian, .2, ex4$p, ex4$p.u, 
-# #                               function(x) block_permute(x, 10), P = 1000)
+# per.test4 <- permutation.test(ex4$ts, ex4$ref, gaussian, .2, ex4$p, ex4$p.u, 
+#                               function(x) block_permute(x, 10), P = 1000)
 
-# # per.test4$null.stat1
-# # range(per.test4$ref.distribution1)
-# # mean(per.test4$ref.distribution1 >= per.test4$null.stat1)
-# # mean(per.test4$ref.distribution1 >= per.test4$null.stat1) < 0.05
+# per.test4$null.stat1
+# range(per.test4$ref.distribution1)
+# mean(per.test4$ref.distribution1 >= per.test4$null.stat1)
+# mean(per.test4$ref.distribution1 >= per.test4$null.stat1) < 0.05
 
-# # per.test4$null.stat2
-# # range(per.test4$ref.distribution2)
-# # mean(per.test4$ref.distribution2 >= per.test4$null.stat2)
-# # mean(per.test4$ref.distribution2 >= per.test4$null.stat2) < 0.05
+# per.test4$null.stat2
+# range(per.test4$ref.distribution2)
+# mean(per.test4$ref.distribution2 >= per.test4$null.stat2)
+# mean(per.test4$ref.distribution2 >= per.test4$null.stat2) < 0.05
 
-# #simulation of first scenario
+#simulation of first scenario
 
-# logis1b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
+logis1b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
 
-# saveRDS(logis1b1, paste0("../results/basecasegen/logis1_", obs.per.block[1], ".Rds"))
+saveRDS(logis1b1, paste0("../results/basecasegen/logis1_", obs.per.block[1], ".Rds"))
 
-# logis1b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
-# saveRDS(logis1b2, paste0("../results/basecasegen/logis1_", obs.per.block[2], ".Rds"))
+logis1b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
+saveRDS(logis1b2, paste0("../results/basecasegen/logis1_", obs.per.block[2], ".Rds"))
 
-# logis1b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
-# saveRDS(logis1b3, paste0("../results/basecasegen/logis1_", obs.per.block[3], ".Rds"))
+logis1b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis1)), P = 1000)
+saveRDS(logis1b3, paste0("../results/basecasegen/logis1_", obs.per.block[3], ".Rds"))
 
-# #There is no GC
+#There is no GC
 
-# logis2 <- function(x) {
-#   matrix(c(
-#     0.8*(exp(5*x)/(1+exp(5*x)))-0.3, 0,
-#     0, .3
-#   ), byrow = T, ncol = 2)
-# }
+logis2 <- function(x) {
+  matrix(c(
+    0.8*(exp(5*x)/(1+exp(5*x)))-0.3, 0,
+    0, .3
+  ), byrow = T, ncol = 2)
+}
 
-# # set.seed(1221)
-# # ex5 <- simulate.far(256, 2, 0, 1, 1, list(logis2))
+# set.seed(1221)
+# ex5 <- simulate.far(256, 2, 0, 1, 1, list(logis2))
 
-# # per.test5 <- permutation.test(ex5$ts, ex5$ref, gaussian, .2, ex5$p, ex5$p.u, 
-# #                               function(x) block_permute(x, 10), P = 1000)
+# per.test5 <- permutation.test(ex5$ts, ex5$ref, gaussian, .2, ex5$p, ex5$p.u, 
+#                               function(x) block_permute(x, 10), P = 1000)
 
-# # per.test5$null.stat1
-# # range(per.test5$ref.distribution1)
-# # mean(per.test5$ref.distribution1 >= per.test5$null.stat1)
-# # mean(per.test5$ref.distribution1 >= per.test5$null.stat1) < 0.05
+# per.test5$null.stat1
+# range(per.test5$ref.distribution1)
+# mean(per.test5$ref.distribution1 >= per.test5$null.stat1)
+# mean(per.test5$ref.distribution1 >= per.test5$null.stat1) < 0.05
 
-# # per.test5$null.stat2
-# # range(per.test5$ref.distribution2)
-# # mean(per.test5$ref.distribution2 >= per.test5$null.stat2)
-# # mean(per.test5$ref.distribution2 >= per.test5$null.stat2) < 0.05
+# per.test5$null.stat2
+# range(per.test5$ref.distribution2)
+# mean(per.test5$ref.distribution2 >= per.test5$null.stat2)
+# mean(per.test5$ref.distribution2 >= per.test5$null.stat2) < 0.05
 
-# #simulation of the second scenario
-# logis2b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
+#simulation of the second scenario
+logis2b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
 
-# saveRDS(logis2b1, paste0("../results/basecasegen/logis2_", obs.per.block[1], ".Rds"))
+saveRDS(logis2b1, paste0("../results/basecasegen/logis2_", obs.per.block[1], ".Rds"))
 
-# logis2b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
-# saveRDS(logis2b2, paste0("../results/basecasegen/logis2_", obs.per.block[2], ".Rds"))
+logis2b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
+saveRDS(logis2b2, paste0("../results/basecasegen/logis2_", obs.per.block[2], ".Rds"))
 
-# logis2b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
-# saveRDS(logis2b3, paste0("../results/basecasegen/logis2_", obs.per.block[3], ".Rds"))
+logis2b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis2)), P = 1000)
+saveRDS(logis2b3, paste0("../results/basecasegen/logis2_", obs.per.block[3], ".Rds"))
 
-# #Both GC
-# logis3 <- function(x) {
-#   matrix(c(
-#     0.8*(exp(5*x)/(1+exp(5*x)))-0.3, 0.2,
-#     -0.9*(exp(5*x)/(1+exp(5*x)))+0.5, .3
-#   ), byrow = T, ncol = 2)
-# }
+#Both GC
+logis3 <- function(x) {
+  matrix(c(
+    0.8*(exp(5*x)/(1+exp(5*x)))-0.3, 0.2,
+    -0.9*(exp(5*x)/(1+exp(5*x)))+0.5, .3
+  ), byrow = T, ncol = 2)
+}
 
 
-# # set.seed(69)
-# # ex6 <- simulate.far(256, 2, 0, 1, 1, list(logis3))
+# set.seed(69)
+# ex6 <- simulate.far(256, 2, 0, 1, 1, list(logis3))
 
-# # per.test6 <- permutation.test(ex6$ts, ex6$ref, gaussian, .2, ex6$p, ex6$p.u, 
-# #                               function(x) block_permute(x, 10), P = 1000)
+# per.test6 <- permutation.test(ex6$ts, ex6$ref, gaussian, .2, ex6$p, ex6$p.u, 
+#                               function(x) block_permute(x, 10), P = 1000)
 
-# # per.test6$null.stat1
-# # range(per.test6$ref.distribution1)
-# # mean(per.test6$ref.distribution1 >= per.test6$null.stat1)
-# # mean(per.test6$ref.distribution1 >= per.test6$null.stat1) < 0.05
+# per.test6$null.stat1
+# range(per.test6$ref.distribution1)
+# mean(per.test6$ref.distribution1 >= per.test6$null.stat1)
+# mean(per.test6$ref.distribution1 >= per.test6$null.stat1) < 0.05
 
-# # per.test6$null.stat2
-# # range(per.test6$ref.distribution2)
-# # mean(per.test6$ref.distribution2 >= per.test6$null.stat2)
-# # mean(per.test6$ref.distribution2 >= per.test6$null.stat2) < 0.05
+# per.test6$null.stat2
+# range(per.test6$ref.distribution2)
+# mean(per.test6$ref.distribution2 >= per.test6$null.stat2)
+# mean(per.test6$ref.distribution2 >= per.test6$null.stat2) < 0.05
 
-# #simulation of the third scenario
-# logis3b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
+#simulation of the third scenario
+logis3b1 <- gc.test(niters, numcores, 256, obs.per.block[1], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
 
-# saveRDS(logis3b1, paste0("../results/basecasegen/logis3_", obs.per.block[1], ".Rds"))
+saveRDS(logis3b1, paste0("../results/basecasegen/logis3_", obs.per.block[1], ".Rds"))
 
-# logis3b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
-# saveRDS(logis3b2, paste0("../results/basecasegen/logis3_", obs.per.block[2], ".Rds"))
+logis3b2 <- gc.test(niters, numcores, 256, obs.per.block[2], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
+saveRDS(logis3b2, paste0("../results/basecasegen/logis3_", obs.per.block[2], ".Rds"))
 
-# logis3b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
-#                     function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
-# saveRDS(logis3b3, paste0("../results/basecasegen/logis3_", obs.per.block[3], ".Rds"))
+logis3b3 <- gc.test(niters, numcores, 256, obs.per.block[3], 
+                    function(n) simulate.far(n, 2, 0, 1, 1, list(logis3)), P = 1000)
+saveRDS(logis3b3, paste0("../results/basecasegen/logis3_", obs.per.block[3], ".Rds"))
 
 setwd("./..")
 rm(list = ls())
