@@ -10,8 +10,9 @@ simulate.far <- function(n, d, u, p, p.u, mixing.matrices, sigma.noise = 1, burn
   for (i in (p.star + 1):(burn + n)) {
     for (j in 1:length(mixing.matrices)) {
       ref[i - p.star] <- ref.point <- ifelse(u == 0, rnorm(1), Y[u, i - p.u]) 
-      Y[, i] <- Y[, i] + mixing.matrices[[j]](ref.point) %*% Y[, i - j] + matrix(rnorm(d, sd = sigma.noise), ncol = 1)
+      Y[, i] <- Y[, i] + mixing.matrices[[j]](ref.point) %*% Y[, i - j]
     }
+    Y[, i] <- Y[, i] + matrix(rnorm(d, sd = sigma.noise), ncol = 1)
   }
   
   list(ts = t(Y[, -(1:burn)]), ref = ref[-(1:burn)], p = p, p.u = p.u, p.star = p.star)
